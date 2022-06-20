@@ -1,28 +1,37 @@
-﻿using System;
+﻿using SapperGame.Interface;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
+
+
 namespace SapperGame
 {
+
     public partial class MainPage : ContentPage
     {
-
         const string timeFormat = @"%m\:ss";
 
         bool isGameInProgress;
         DateTime gameStartTime;
 
         String level;
-        
-
-        public MainPage()
+        App app;
+       
+        public MainPage(App app)
         {
-            InitializeComponent(); 
-
+            InitializeComponent();
+            this.app = app;
+            piker.Title = App.difficulty;
+            PrepareActions();
+            PrepareForNewGame();
+        }
+        void PrepareActions()
+        {
             board.GameStarted += (sender, args) =>
             {
                 isGameInProgress = true;
-                
+
                 gameStartTime = DateTime.Now;
 
                 Device.StartTimer(TimeSpan.FromSeconds(1), () =>
@@ -35,7 +44,7 @@ namespace SapperGame
             board.GameEnded += (sender, hasWon) =>
             {
                 isGameInProgress = false;
-
+                
                 if (hasWon)
                 {
                     DisplayWonAnimation();
@@ -44,13 +53,33 @@ namespace SapperGame
                 {
                     DisplayLostAnimation();
                 }
+                
+                WriteFile(hasWon);
+
             };
-
-            PrepareForNewGame();
         }
-
+        void WriteFile(bool status)
+        {
+            string message;
+            if (status)
+            {
+                message = "Победа - Уровень: "+ App.difficulty + " - Время: "+timeLabel.Text;
+            }
+            else
+            {
+                message = "Поражение - Уровень: " + App.difficulty + " - Время: " + timeLabel.Text;
+            }
+            
+            
+            //DependencyService.Get<IFileService>().WriteFile(message);
+            DependencyService.Get<IFileService>().CreateFile(message);
+        }
+        
         void PrepareForNewGame()
         {
+            //app.restart();
+           
+
             board.NewGameInitialize();
 
             congratulationsText.IsVisible = false;
@@ -74,18 +103,29 @@ namespace SapperGame
                 {
                     case("Легкий"):
                         Board.MINES = 2;
+                        Board.COLS = 4;
+                        Board.ROWS = 4;
                         break;
                     case ("Средний"):
                         Board.MINES = 4;
+                        Board.COLS = 5;
+                        Board.ROWS = 5;
                         break;
                     case ("Сложный"):
                         Board.MINES = 9;
+                        Board.COLS = 6;
+                        Board.ROWS = 6;
                         break;
                     default:
                         break;
                 }
+                App.difficulty = level;
                 lbMineCount.Text = " бомб из " + Board.MINES;
-                PrepareForNewGame();
+
+                //PrepareForNewGame();
+                app.Restart();
+                
+               
             }  
         }
 
@@ -157,6 +197,8 @@ namespace SapperGame
             playAgainButton.Scale = 3;
             playAgainButton.IsVisible = true;
             playAgainButton.IsEnabled = true;
+
+            await Task.Delay(1000);
         }
 
         void OnplayAgainButtonClicked(object sender, object EventArgs)
@@ -164,6 +206,9 @@ namespace SapperGame
             PrepareForNewGame();
         }
 
-        
+        void ShowRating(object sender, EventArgs args)
+        {
+            Navigation.PushAsync(new RatingPage());
+        }
     }
 }

@@ -5,11 +5,12 @@ namespace SapperGame
 {
     class Board : AbsoluteLayout
     {
-   
-        const int COLS = 5;
-        const int ROWS = 5;         
+        //сохранение топ лучших результатов
+
+        public static int COLS = 4;//изменение поля от ур сложности
+        public static int ROWS = 4;         
         public static int MINES = 2;
-        
+
         Tile[,] tiles = new Tile[ROWS, COLS];
         int flaggedTileCount;
         bool isGameInProgress;              // на первое нажатие
@@ -32,18 +33,19 @@ namespace SapperGame
                 }
 
             SizeChanged += (sender, args) =>
-                {
-                    double tileWidth = this.Width / COLS;
-                    double tileHeight = this.Height / ROWS;
+            {
+                double tileWidth = this.Width / COLS;
+                double tileHeight = this.Height / ROWS;
 
-                    foreach (Tile tile in tiles)
-                    {
-                        Rectangle bounds = new Rectangle(tile.Col * tileWidth,
-                                                         tile.Row * tileHeight,
-                                                         tileWidth, tileHeight);
-                        AbsoluteLayout.SetLayoutBounds(tile, bounds);
-                    }
-                };
+                foreach (Tile tile in tiles)
+                {
+                    Rectangle bounds = new Rectangle(tile.Col * tileWidth,
+                                                     tile.Row * tileHeight,
+                                                     tileWidth, tileHeight);
+                    AbsoluteLayout.SetLayoutBounds(tile, bounds);
+                }
+            };
+
 
             NewGameInitialize();
         }
@@ -54,6 +56,7 @@ namespace SapperGame
             foreach (Tile tile in tiles)
                 tile.Initialize();
 
+            
             isGameInProgress = false;
             isGameInitialized = false;
             isGameEnded = false;
@@ -168,7 +171,7 @@ namespace SapperGame
 
             this.FlaggedTileCount = flaggedCount;
 
-            // Получите плитку, статус которой изменился
+            // Получите ячейку, статус которой изменился
             Tile changedTile = (Tile)sender;
 
             // Если он открыт, требуются некоторые действия

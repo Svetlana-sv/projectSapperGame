@@ -15,10 +15,10 @@ namespace SapperGame
     class Tile : Frame
     {
         TileStatus tileStatus = TileStatus.Hidden;
-        Label label;
-        Image flagImage, mineImage;
-        static ImageSource flagImageSource;
-        static ImageSource mineImageSource;
+        readonly Label label;
+        readonly Image flagImage, mineImage;
+        readonly static ImageSource flagImageSource;
+        readonly static ImageSource mineImageSource;
         bool doNotFireEvent;
 
         public event EventHandler<TileStatus> TileStatusChanged;

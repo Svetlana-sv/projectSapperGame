@@ -32,9 +32,14 @@
                     <Label Text="Двойной клик - здесь нет бомбы" HorizontalOptions="Center"/>
                 </StackLayout>
 
+                <StackLayout Orientation="Horizontal" Spacing="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Center">
+                    <Button x:Name="showRating" Text="Статистика" HorizontalOptions="Center" VerticalOptions="Center" Clicked="ShowRating"
+                            BorderColor="Black" BorderWidth="1" BackgroundColor="White" TextColor="Black" Margin="5" />
+                </StackLayout>
+
                 <StackLayout HorizontalOptions="Center" Spacing="0" VerticalOptions="CenterAndExpand">
                     <Label Text="Выбирите уровень сложности:" HorizontalOptions="Center"/>
-                    <Picker x:Name="piker" VerticalOptions="CenterAndExpand" SelectedIndex="1" Title="Легкий" FontSize="15" TitleColor="#224DA6" SelectedIndexChanged ="OnPickerSelectedIndexChanged">
+                    <Picker x:Name="piker" VerticalOptions="CenterAndExpand" SelectedIndex="1" Title="ehjdty" FontSize="15" TitleColor="#224DA6" SelectedIndexChanged ="OnPickerSelectedIndexChanged">
                         <Picker.Items>
                             <x:String>Легкий</x:String>
                             <x:String>Средний</x:String>
@@ -44,6 +49,7 @@
                     
                 </StackLayout>
 
+                
                 <StackLayout Orientation="Horizontal" Spacing="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Center">
                     <Label BindingContext="{x:Reference board}" Text="{Binding FlaggedTileCount, StringFormat='Отмечено {0} '}" />
                     <Label x:Name="lbMineCount" BindingContext="{x:Reference board}" Text="{Binding MineCount, StringFormat=' бомб из {0}'}" />

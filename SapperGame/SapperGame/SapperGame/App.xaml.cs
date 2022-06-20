@@ -6,13 +6,18 @@ namespace SapperGame
 {
     public partial class App : Application
     {
+        public static String difficulty = "Легкий";
         public App()
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            Restart();
         }
 
+        public void Restart()
+        {
+            MainPage = new NavigationPage(new MainPage(this));
+        }
         protected override void OnStart()
         {
         }
